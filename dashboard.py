@@ -4,13 +4,25 @@ import pandas as pd
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
+import streamlit.components.v1 as components
+import shap
+
+def st_shap(plot, height=None):    
+    shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"    
+    components.html(shap_html, height=height)
 
 st.write("Bienvenu dans l'application SCORING")
 X_test=pd.read_csv("X_test_real_data.csv",index_col='SK_ID_CURR')
+
+liste_Id=joblib.load('lists_ID.joblib')
+expected_value=joblib.load('expected_value.joblib')
+shap_values=joblib.load('shap_values.joblib')
+data_sample=pd.read_csv("X_test_sample.csv",index_col='SK_ID_CURR')
+
 listIdclient=list(X_test.index)
 idClient=st.sidebar.selectbox("Id Client : ",listIdclient)
 st.write("Voici le client sélectionné : ",idClient)
-
 st.dataframe(X_test.loc[[int(idClient)]].drop(columns=["TARGET"]))
 #predictResul=req.post(url="http://127.0.0.1:8000/predict_client",json={"client_id": idClient}).json()
 predictResul=req.post(url="https://api-ps-seven.herokuapp.com/predict_client",json={"client_id": idClient}).json()
@@ -39,6 +51,11 @@ fig = go.Figure(go.Indicator(
 fig.update_layout(paper_bgcolor='#BFFFFC',font={'color':'darkblue','family':'Arial'})
 st.write(fig)
 
+# Interpretabilité locale
+st.set_option('deprecation.showPyplotGlobalUse', False)                    
+shap.decision_plot(expected_value,shap_values[liste_Id[int(idClient)]],data_sample.iloc[liste_Id[int(idClient)],:])
+st.pyplot(bbox_inches='tight')
+
 listVarToPlot=["AMT_CREDIT","AMT_ANNUITY","DAYS_EMPLOYED","CNT_CHILDREN"]
 featureToPlot=st.selectbox('',listVarToPlot)
 valClient=int(X_test.loc[[int(idClient)]][featureToPlot].values)
@@ -51,3 +68,4 @@ ax=sns.kdeplot(t1[featureToPlot],color="red",label="Client Non Solvable")
 plt.axvline(valClient,color="blue")
 plt.legend(fontsize=10)
 st.pyplot(fig)
+

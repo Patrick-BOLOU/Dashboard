@@ -6,3 +6,4 @@ seaborn==0.11.0
 requests==2.24.0
 plotly==5.13.0
 matplotlib==3.3.2
+shap==0.40.0

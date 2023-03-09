@@ -51,12 +51,17 @@ fig = go.Figure(go.Indicator(
 fig.update_layout(paper_bgcolor='#BFFFFC',font={'color':'darkblue','family':'Arial'})
 st.write(fig)
 
+if predictResul["prediction"]==0 :
+    st.write("le client est SOLVABLE")
+else :
+    st.write("le client est NON SOLVABLE")
+
 # Interpretabilité locale
 st.set_option('deprecation.showPyplotGlobalUse', False)                    
 shap.decision_plot(expected_value,shap_values[liste_Id[int(idClient)]],data_sample.iloc[liste_Id[int(idClient)],:])
 st.pyplot(bbox_inches='tight')
 
-listVarToPlot=["AMT_CREDIT","AMT_ANNUITY","DAYS_EMPLOYED","CNT_CHILDREN"]
+listVarToPlot=["AMT_CREDIT","AMT_ANNUITY","DAYS_EMPLOYED","CNT_CHILDREN","EXT_SOURCE_2","EXT_SOURCE_3"]
 featureToPlot=st.selectbox('',listVarToPlot)
 valClient=int(X_test.loc[[int(idClient)]][featureToPlot].values)
 fig,ax=plt.subplots()

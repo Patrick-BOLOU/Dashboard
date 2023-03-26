@@ -18,7 +18,7 @@ X_test=pd.read_csv("https://github.com/Patrick-BOLOU/Dashboard/blob/main/X_test_
 liste_Id=joblib.load('lists_ID.joblib')
 expected_value=joblib.load('expected_value.joblib')
 shap_values=joblib.load('shap_values.joblib')
-data_sample=pd.read_csv("X_test_sample.csv",index_col='SK_ID_CURR')
+data_sample=pd.read_csv("https://github.com/Patrick-BOLOU/Dashboard/blob/main/X_test_sample.csv",index_col='SK_ID_CURR')
 
 listIdclient=list(X_test.index)
 idClient=st.sidebar.selectbox("Id Client : ",listIdclient)

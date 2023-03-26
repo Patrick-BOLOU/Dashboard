@@ -13,12 +13,12 @@ def st_shap(plot, height=None):
     components.html(shap_html, height=height)
 
 st.write("Bienvenu dans l'application SCORING")
-X_test=pd.read_csv("https://github.com/Patrick-BOLOU/Dashboard/blob/main/X_test_real_data.csv",index_col='SK_ID_CURR')
+X_test=pd.read_csv("https://github.com/Patrick-BOLOU/Dashboard/main/X_test_real_data.csv",index_col='SK_ID_CURR')
 
 liste_Id=joblib.load('lists_ID.joblib')
 expected_value=joblib.load('expected_value.joblib')
 shap_values=joblib.load('shap_values.joblib')
-data_sample=pd.read_csv("https://github.com/Patrick-BOLOU/Dashboard/blob/main/X_test_sample.csv",index_col='SK_ID_CURR')
+data_sample=pd.read_csv("https://github.com/Patrick-BOLOU/Dashboard/main/X_test_sample.csv",index_col='SK_ID_CURR')
 
 listIdclient=list(X_test.index)
 idClient=st.sidebar.selectbox("Id Client : ",listIdclient)
